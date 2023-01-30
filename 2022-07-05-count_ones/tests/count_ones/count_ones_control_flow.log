@@ -1,0 +1,88 @@
+NOTE : Temporary registers are considered as
+       variables of the intermediate language. 
+       Variable 'R0' (that refers to the 
+       physical register 'R0') is always 
+       considered LIVE-IN for each node of 
+       a basic block. 
+       Thus, in the following control flow graph, 
+       'R0' will never appear as LIVE-IN or LIVE-OUT
+       variable for a statement.
+
+       If you want to consider 'R0' as
+       a normal variable, you have to set
+       to 0 the value of the macro CFLOW_ALWAYS_LIVEIN_R0
+       defined in "cflow_constants.h".
+
+
+**************************
+     CONTROL FLOW GRAPH   
+**************************
+NUMBER OF BASIC BLOCKS : 7 
+NUMBER OF USED VARIABLES : 14 
+--------------------------
+START BASIC BLOCK INFOS.  
+--------------------------
+[BLOCK 1] 
+NUMBER OF PREDECESSORS : 0 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 3 
+	1.        ADDI R3 R0 #12345    /* line 3 */
+	2.        ADDI R4 R0 #0 
+	3.        ADD R5 R0 R1 
+--------------------------
+[BLOCK 2] 
+NUMBER OF PREDECESSORS : 2 
+NUMBER OF SUCCESSORS : 2 
+NUMBER OF INSTRUCTIONS : 2 
+	1.  L3    SUBI R0 R5 #0 
+	2.        BEQ L2
+--------------------------
+[BLOCK 3] 
+NUMBER OF PREDECESSORS : 1 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 4 
+	1.        ANDBI R6 R5 #1 
+	2.        ADD R4 R6 R4 
+	3.        SHRI R5 R5 #1 
+	4.        BT L3
+--------------------------
+[BLOCK 4] 
+NUMBER OF PREDECESSORS : 1 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 7 
+	1.  L2    ADDI R7 R4 #100 
+	2.        ADD R2 R0 R7 
+	3.        WRITE R2 0           /* line 4 */
+	4.        SUBI R8 R1 #64       /* line 6 */
+	5.        ADDI R9 R8 #255 
+	6.        ADDI R10 R0 #0 
+	7.        ADD R11 R0 R9 
+--------------------------
+[BLOCK 5] 
+NUMBER OF PREDECESSORS : 2 
+NUMBER OF SUCCESSORS : 2 
+NUMBER OF INSTRUCTIONS : 2 
+	1.  L5    SUBI R0 R11 #0 
+	2.        BEQ L4
+--------------------------
+[BLOCK 6] 
+NUMBER OF PREDECESSORS : 1 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 4 
+	1.        ANDBI R12 R11 #1 
+	2.        ADD R10 R12 R10 
+	3.        SHRI R11 R11 #1 
+	4.        BT L5
+--------------------------
+[BLOCK 7] 
+NUMBER OF PREDECESSORS : 1 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 5 
+	1.  L4    ADD R2 R0 R10 
+	2.        WRITE R2 0           /* line 7 */
+	3.        ADDI R2 R0 #32       /* line 9 */
+	4.        WRITE R2 0           /* line 10 */
+	5.        HALT 
+**************************
+
+

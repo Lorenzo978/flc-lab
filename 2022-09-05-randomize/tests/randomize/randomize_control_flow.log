@@ -1,0 +1,90 @@
+NOTE : Temporary registers are considered as
+       variables of the intermediate language. 
+       Variable 'R0' (that refers to the 
+       physical register 'R0') is always 
+       considered LIVE-IN for each node of 
+       a basic block. 
+       Thus, in the following control flow graph, 
+       'R0' will never appear as LIVE-IN or LIVE-OUT
+       variable for a statement.
+
+       If you want to consider 'R0' as
+       a normal variable, you have to set
+       to 0 the value of the macro CFLOW_ALWAYS_LIVEIN_R0
+       defined in "cflow_constants.h".
+
+
+**************************
+     CONTROL FLOW GRAPH   
+**************************
+NUMBER OF BASIC BLOCKS : 4 
+NUMBER OF USED VARIABLES : 18 
+--------------------------
+START BASIC BLOCK INFOS.  
+--------------------------
+[BLOCK 1] 
+NUMBER OF PREDECESSORS : 0 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 2 
+	1.        ADDI R3 R0 #12345    /* line 4 */
+	2.        ADDI R2 R0 #0 
+--------------------------
+[BLOCK 2] 
+NUMBER OF PREDECESSORS : 2 
+NUMBER OF SUCCESSORS : 2 
+NUMBER OF INSTRUCTIONS : 4 
+	1.  L2    SUBI R4 R2 #3        /* line 5 */
+	2.        SLT R4 0
+	3.        ANDB R4 R4 R4 
+	4.        BEQ L3
+--------------------------
+[BLOCK 3] 
+NUMBER OF PREDECESSORS : 1 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 13 
+	1.        ADDI R11 R0 #25      /* line 7 */
+	2.        SHLI R11 R11 #16 
+	3.        ADDI R11 R11 #26125 
+	4.        MUL R5 R3 R11 
+	5.        ADDI R12 R0 #15471 
+	6.        SHLI R12 R12 #16 
+	7.        ADDI R12 R12 #-3233 
+	8.        ADD R5 R5 R12 
+	9.        ADD R3 R0 R5 
+	10.        WRITE R5 0
+	11.        ADDI R6 R2 #1        /* line 8 */
+	12.        ADD R2 R0 R6 
+	13.        BT L2                /* line 9 */
+--------------------------
+[BLOCK 4] 
+NUMBER OF PREDECESSORS : 1 
+NUMBER OF SUCCESSORS : 1 
+NUMBER OF INSTRUCTIONS : 25 
+	1.  L3    ADDI R3 R0 #12345    /* line 11 */
+	2.        ADDI R13 R0 #25      /* line 12 */
+	3.        SHLI R13 R13 #16 
+	4.        ADDI R13 R13 #26125 
+	5.        MUL R7 R3 R13 
+	6.        ADDI R14 R0 #15471 
+	7.        SHLI R14 R14 #16 
+	8.        ADDI R14 R14 #-3233 
+	9.        ADD R7 R7 R14 
+	10.        ADD R3 R0 R7 
+	11.        WRITE R7 0
+	12.        ADDI R15 R0 #25      /* line 13 */
+	13.        SHLI R15 R15 #16 
+	14.        ADDI R15 R15 #26125 
+	15.        MUL R8 R3 R15 
+	16.        ADDI R16 R0 #15471 
+	17.        SHLI R16 R16 #16 
+	18.        ADDI R16 R16 #-3233 
+	19.        ADD R8 R8 R16 
+	20.        ADD R3 R0 R8 
+	21.        DIVI R9 R8 #1000 
+	22.        ADDI R10 R9 #7 
+	23.        ADD R1 R0 R10 
+	24.        WRITE R1 0           /* line 14 */
+	25.        HALT 
+**************************
+
+

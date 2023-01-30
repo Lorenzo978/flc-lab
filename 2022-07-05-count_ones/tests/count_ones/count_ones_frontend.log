@@ -1,0 +1,46 @@
+**************************
+          PROGRAM         
+**************************
+
+-----------
+ VARIABLES
+-----------
+[a]
+   type = INTEGER, scalar initial value = 123456
+   label = _a (ID=0)
+   location = R1
+[b]
+   type = INTEGER, scalar initial value = 0
+   label = _b (ID=1)
+   location = R2
+
+--------------
+ INSTRUCTIONS
+--------------
+      ADDI R3 R0 #12345    /* line 3 */
+      ADDI R4 R0 #0 
+      ADD R5 R0 R1 
+L3    SUBI R0 R5 #0 
+      BEQ L2
+      ANDBI R6 R5 #1 
+      ADD R4 R6 R4 
+      SHRI R5 R5 #1 
+      BT L3
+L2    ADDI R7 R4 #100 
+      ADD R2 R0 R7 
+      WRITE R2 0           /* line 4 */
+      SUBI R8 R1 #64       /* line 6 */
+      ADDI R9 R8 #255 
+      ADDI R10 R0 #0 
+      ADD R11 R0 R9 
+L5    SUBI R0 R11 #0 
+      BEQ L4
+      ANDBI R12 R11 #1 
+      ADD R10 R12 R10 
+      SHRI R11 R11 #1 
+      BT L5
+L4    ADD R2 R0 R10 
+      WRITE R2 0           /* line 7 */
+      ADDI R2 R0 #32       /* line 9 */
+      WRITE R2 0           /* line 10 */
+      HALT 
