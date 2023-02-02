@@ -110,12 +110,6 @@ typedef struct t_while_statement
                                     * that follows the while construct */
 } t_while_statement;
 
-typedef struct t_converge_stmt 
-{
-   t_axe_label *l_back;
-   int r_previousValue;
-} t_converge_stmt;
-
 /* create a label */
 extern t_axe_label *alloc_label(int value);
 

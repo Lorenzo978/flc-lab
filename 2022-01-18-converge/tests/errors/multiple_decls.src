@@ -1,6 +1,0 @@
-int a,b,c;
-int d,c;
-
-a = b+c;
-b = c+d;
-c = d+a;

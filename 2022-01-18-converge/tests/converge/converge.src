@@ -1,0 +1,11 @@
+int a,b;
+a = 31;
+
+converge a {
+    a = a/3;
+    write(a);
+}
+
+converge a {
+    write(a);
+}

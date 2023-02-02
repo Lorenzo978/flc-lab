@@ -74,7 +74,6 @@ extern int cflow_errorcode;   /* As for `errorcode' this value is used to
                         * a control flow graph. More informations can be found
                         * analyzing the file `axe_cflow_graph.h'. */
                      
-
 /* program informations */
 t_program_infos *program;  /* The singleton instance of `program'.
                             * An instance of `t_program_infos' holds in its
@@ -110,7 +109,6 @@ extern void yyerror(const char*);
    t_list *list;
    t_axe_label *label;
    t_while_statement while_stmt;
-   t_converge_stmt converge_stmt;
 } 
 /*=========================================================================
                                TOKENS 
@@ -135,8 +133,6 @@ extern void yyerror(const char*);
 %token <intval> TYPE
 %token <svalue> IDENTIFIER
 %token <intval> NUMBER
-%token <converge_stmt> CONVERGE
-
 
 %type <expr> exp
 %type <decl> declaration
@@ -250,42 +246,18 @@ statements  : statements statement       { /* does nothing */ }
  * or a read/write statement or a semicolon */
 statement   : assign_statement SEMI      { /* does nothing */ }
             | control_statement          { /* does nothing */ }
-            | read_write_statement SEMI  { /* does nothing */ }         
+            | read_write_statement SEMI  { /* does nothing */ }
             | SEMI            { gen_nop_instruction(program); }
 ;
 
 control_statement : if_statement         { /* does nothing */ }
             | while_statement            { /* does nothing */ }
             | do_while_statement SEMI    { /* does nothing */ }
-            | converge_statement
             | return_statement SEMI      { /* does nothing */ }
 ;
 
 read_write_statement : read_statement  { /* does nothing */ }
                      | write_statement { /* does nothing */ }
-;
-
-converge_statement : CONVERGE IDENTIFIER 
-                     {
-                        t_axe_variable* v_conv = getVariable(program, $2);
-                        if(!v_conv || v_conv->isArray)
-                        {
-                           yyerror("The convergence variable can't be an array.");
-                           YYERROR;
-                        }
-
-                        $1.r_previousValue = getNewRegister(program);
-                        $1.l_back = assignNewLabel(program);
-
-                        int r_tmp = get_symbol_location(program,$2,0);
-                        gen_add_instruction(program, $1.r_previousValue, REG_0, r_tmp,CG_DIRECT_ALL);
-                     } 
-                     code_block
-                     {
-                        int r_tmp = get_symbol_location(program, $2,0);
-                        gen_sub_instruction(program, REG_0, $1.r_previousValue, r_tmp, CG_DIRECT_ALL);
-                        gen_bne_instruction(program, $1.l_back, 0);
-                     }
 ;
 
 assign_statement : IDENTIFIER LSQUARE exp RSQUARE ASSIGN exp

@@ -1,8 +1,0 @@
-int a,b,somma;
-
-read(a);
-read(b);
-
-somma = a + b;
-
-write(somma);
