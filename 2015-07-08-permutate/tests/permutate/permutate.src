@@ -1,0 +1,17 @@
+int arr[10];
+int i = 0;
+
+while(i < 6)
+{
+    arr[i] = 10+i;
+    i = i+1;
+}
+
+permutate(arr, q[ 4, 2, 0]p);
+
+i = 0;
+while(i < 6)
+{
+    write(arr[i]);
+    i = i+1;
+}

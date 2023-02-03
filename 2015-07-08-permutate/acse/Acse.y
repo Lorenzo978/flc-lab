@@ -125,6 +125,9 @@ extern void yyerror(const char*);
 %token RETURN
 %token READ
 %token WRITE
+%token PERMUTATE
+%token LPERM
+%token RPERM
 
 %token <label> DO
 %token <while_stmt> WHILE
@@ -138,6 +141,7 @@ extern void yyerror(const char*);
 %type <decl> declaration
 %type <list> declaration_list
 %type <label> if_stmt
+%type <list> perm_list
 
 /*=========================================================================
                           OPERATOR PRECEDENCES
@@ -247,6 +251,7 @@ statements  : statements statement       { /* does nothing */ }
 statement   : assign_statement SEMI      { /* does nothing */ }
             | control_statement          { /* does nothing */ }
             | read_write_statement SEMI  { /* does nothing */ }
+            | permutate_stmt SEMI         {}
             | SEMI            { gen_nop_instruction(program); }
 ;
 
@@ -258,6 +263,39 @@ control_statement : if_statement         { /* does nothing */ }
 
 read_write_statement : read_statement  { /* does nothing */ }
                      | write_statement { /* does nothing */ }
+;
+
+permutate_stmt : PERMUTATE LPAR IDENTIFIER COMMA LPERM perm_list RPERM RPAR
+{
+      t_list* perm = $6;
+
+      int first = LINTDATA(perm);
+
+      int r_tmp = loadArrayElement(program, $3, create_expression(first, IMMEDIATE));
+      perm = LNEXT(perm);
+
+
+
+      while(perm != NULL)
+      {
+         int r_next_to_write = loadArrayElement(program, $3, create_expression(LINTDATA(perm), IMMEDIATE));
+         storeArrayElement(program, $3, create_expression(LINTDATA(perm),IMMEDIATE), create_expression(r_tmp, REGISTER));
+         
+         gen_add_instruction(program, r_tmp, r_next_to_write, REG_0, CG_DIRECT_ALL);
+         perm = LNEXT(perm);
+      }
+
+      storeArrayElement(program, $3, create_expression(first,IMMEDIATE), create_expression(r_tmp, REGISTER));
+};
+
+perm_list : NUMBER
+         {
+            $$ = addFirst(NULL, (void*)(intptr_t) $1);
+         } |
+         NUMBER COMMA perm_list 
+         {
+            $$ = addFirst($3, (void*)(intptr_t) $1);
+         }
 ;
 
 assign_statement : IDENTIFIER LSQUARE exp RSQUARE ASSIGN exp
